@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Core.Entities;
 using Core.Interfaces;
 
 namespace Core.Specifications;
@@ -10,7 +11,17 @@ public class BaseSpecification<T>(
     public Expression<Func<T, bool>>? Criteria => criteria;
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
+    public IQueryable<T> ApplyCriteria(IQueryable<T> query)
+    {
+        if (Criteria is not null)
+            query = query.Where(Criteria);
+        return query;
+    }
+
     public bool IsDistinct { get; private set; }
+    public int Take { get; private set; }
+    public int Skip { get; private set; }
+    public bool IsPagingEnabled { get; private set; }
 
     protected void AddOrderBy(Expression<Func<T, object>> expression)
     {
@@ -25,6 +36,13 @@ public class BaseSpecification<T>(
     protected void ApplyDistinct()
     {
         IsDistinct = true;
+    }
+
+    protected void ApplyPaging(int skip, int take)
+    {
+        Skip = skip;
+        Take = take;
+        IsPagingEnabled = true;
     }
 }
 

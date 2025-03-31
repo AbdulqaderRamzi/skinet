@@ -18,6 +18,9 @@ public abstract class SpecificationEvaluator<T> where T : BaseEntity
         
         if (spec.IsDistinct)
             query = query.Distinct();
+
+        if (spec.IsPagingEnabled)
+            query = query.Skip(spec.Skip).Take(spec.Take);
         
         return query;
     }
@@ -40,12 +43,13 @@ public abstract class SpecificationEvaluator<T> where T : BaseEntity
         var selectQuery = query as IQueryable<TResult>;
 
         if (spec.Select is not null)
-        {
             selectQuery = query.Select(spec.Select);
-        }
         
         if (spec.IsDistinct)
             selectQuery = selectQuery?.Distinct();
+        
+        if (spec.IsPagingEnabled)
+            selectQuery = selectQuery?.Skip(spec.Skip).Take(spec.Take);
         
         return selectQuery ?? query.Cast<TResult>();
     }

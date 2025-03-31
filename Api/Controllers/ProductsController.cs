@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Api.Helpers;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,10 @@ namespace Api.Controllers;
 public class ProductsController(IGenericRepository<Product> repo) : ApiController
 {
     [HttpGet]
-    public async Task<IActionResult> Get(string? brand, string? type, string? sort)
+    public async Task<IActionResult> Get([FromQuery] ProductSpecParams specParams)
     {
-        var spec = new ProductSpecification(brand, type, sort);
-        return Ok(await repo.GetAllAsync(spec));
+        var spec = new ProductSpecification(specParams);
+        return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
     }
     
     [HttpGet("{id:guid}")]
