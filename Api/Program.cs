@@ -1,3 +1,4 @@
+using Api.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +14,16 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:4200"));
 
 app.MapControllers();
 await SeedData();
@@ -23,7 +32,7 @@ app.Run();
 return;
 
 async Task SeedData()
-{
+{ 
     try
     {
         using var scope = app.Services.CreateScope();
