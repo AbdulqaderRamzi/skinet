@@ -11,6 +11,18 @@ html {
   }
 }
 
+img {
+  user-select: none;
+}
+
 .wrapper {
   @apply max-w-screen-2xl mx-7;
+}
+
+.text-primary {
+  color: #005cbb;
+}
+
+button.match-input-height {
+  height: var(--mat-form-field) !important;
 }
