@@ -5,5 +5,5 @@ public class Pagination<T>(int pageSize, int pageIndex, int count, IReadOnlyList
     public int PageIndex { get; set; } = pageIndex;
     public int PageSize { get; set; } = pageSize;
     public int Count { get; set; } = count;
-    public IReadOnlyList<T> Date { get; set; } = data;
+    public IReadOnlyList<T> Data { get; set; } = data;
 }
