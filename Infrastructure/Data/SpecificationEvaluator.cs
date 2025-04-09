@@ -25,7 +25,7 @@ public abstract class SpecificationEvaluator<T> where T : BaseEntity
         return query;
     }
     
-    public static IQueryable<TResult> GetQuery<TSpec, TResult>(
+    public static IQueryable<TResult> GetQuery<TResult>(
         IQueryable<T> query, ISpecification<T, TResult> spec)
     {
         if (spec.Criteria is not null)

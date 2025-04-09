@@ -1,5 +1,4 @@
-﻿using Api.Helpers;
-using Core.Entities;
+﻿using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +25,7 @@ public class ProductsController(IGenericRepository<Product> repo) : ApiControlle
     [HttpGet("brands")]
     public async Task<IActionResult> GetBrands()
     {
-        var spec = new BrandListSpecification();
+        var spec = new BrandListSpecification(); 
         return Ok(await repo.GetAllAsync(spec));
     }
     

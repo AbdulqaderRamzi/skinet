@@ -24,5 +24,23 @@ img {
 }
 
 button.match-input-height {
-  height: var(--mat-form-field) !important;
+  height: 56px !important;
+  line-height: 56px !important;
+  padding: 0 16px !important;
+}
+
+.mdc-notched-outline__notch {
+  border-right-style: none !important;
+}
+
+.mat-mdc-snack-bar-container.snack-error {
+  --mdc-snackbar-container-color: red;
+  --mdc-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+.mat-mdc-snack-bar-container.snack-success {
+  --mdc-snackbar-container-color: green;
+  --mdc-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
 }

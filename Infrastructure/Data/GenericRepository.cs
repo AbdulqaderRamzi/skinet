@@ -45,7 +45,7 @@ public class GenericRepository<T>(AppDbContext db)
 
     public void Update(T entity)
     {
-        db.Set<T>().Attach(entity); // happened automatically in the bottom 
+        db.Set<T>().Attach(entity); // happened automatically at the bottom 
         db.Entry(entity).State = EntityState.Modified;
     }
 
@@ -78,6 +78,6 @@ public class GenericRepository<T>(AppDbContext db)
 
     private IQueryable<TResult> ApplySpecification<TResult>(ISpecification<T, TResult> spec)
     {
-        return SpecificationEvaluator<T>.GetQuery<T, TResult>(db.Set<T>().AsQueryable(), spec);
+        return SpecificationEvaluator<T>.GetQuery(db.Set<T>().AsQueryable(), spec);
     }
 }
