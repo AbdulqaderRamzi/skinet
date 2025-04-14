@@ -9,15 +9,21 @@
       <a href="#">Contact</a>
     </nav>
     <div class="flex gap-3 align-middle">
-      <a matBadge="5" matBadgeSize="large" class="custom-badge mt-2 mr-2">
+      <a
+        routerLink="/cart"
+        routerLinkActive="active"
+        matBadge="{{ cartService.itemCount() }}"
+        matBadgeSize="large"
+        class="custom-badge mt-2 mr-2"
+      >
         <mat-icon>shopping_cart</mat-icon>
       </a>
       <button mat-stroked-button>Login</button>
       <button mat-stroked-button>Register</button>
     </div>
   </div>
-</header>
 
-@if (busySrervide.loading) {
-<mat-progress-bar mode="indeterminate" class="fixed top-20 z-50"></mat-progress-bar>
-}
+  @if (busySrervide.loading) {
+  <mat-progress-bar mode="indeterminate" class="fixed top-1 z-50"></mat-progress-bar>
+  }
+</header>
