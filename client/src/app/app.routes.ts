@@ -6,6 +6,8 @@ import { ServerErrorComponent } from './shared/components/server-error/server-er
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { CartComponent } from './features/cart/cart.component';
 import { CheckoutComponent } from './features/checkout/checkout.component';
+import { RegisterComponent } from './features/account/register/register.component';
+import { LoginComponent } from './features/account/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,6 +15,8 @@ export const routes: Routes = [
   { path: 'shop/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'account/register', component: RegisterComponent },
+  { path: 'account/login', component: LoginComponent },
   { path: 'server-error', component: ServerErrorComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },

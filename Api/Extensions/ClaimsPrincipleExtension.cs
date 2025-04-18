@@ -30,7 +30,6 @@ public static class ClaimsPrincipleExtension
         
         return userToReturn;
     }
-
     
     public static string GetEmail(this ClaimsPrincipal user)
     {

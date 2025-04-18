@@ -1,14 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { type Pagination } from '../../shared/models/pagination';
-import { Product } from '../../shared/models/product';
+import { type Product } from '../../shared/models/product';
 import { type ShopParams } from '../../shared/models/shopParams';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopService {
-  baseUrl = 'http://localhost:5000/api/';
+  baseUrl = environment.apiUrl;
   brands: string[] = [];
   types: string[] = [];
   private http = inject(HttpClient);

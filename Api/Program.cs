@@ -52,7 +52,7 @@ async Task SeedData()
 { 
     try
     {
-        using var scope = app.Services.CreateScope();
+        using var scope = app.Services.CreateScope();  
         var services = scope.ServiceProvider;
         var db = services.GetRequiredService<AppDbContext>();
         await db.Database.MigrateAsync(); // Create db && Apply migrations 

@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Cart, CartItem } from '../../shared/models/cart';
-import { Product } from '../../shared/models/product';
+import { Cart, type CartItem } from '../../shared/models/cart';
+import { type Product } from '../../shared/models/product';
 import { map } from 'rxjs';
 
 @Injectable({
@@ -70,6 +70,7 @@ export class CartService {
       }
     }
   }
+
   deleteCart() {
     this.http.delete(this.baseUrl + `cart?id=${this.cart()?.id}`).subscribe({
       next: () => {

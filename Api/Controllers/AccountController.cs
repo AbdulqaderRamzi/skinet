@@ -22,14 +22,13 @@ public class AccountController(SignInManager<AppUser> signInManager) : ApiContro
         var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
 
         if (result.Succeeded) return Ok();
-        
+            
         foreach (var error in result.Errors)
         {
             ModelState.AddModelError(error.Code, error.Description);
         }
-            
+        
         return ValidationProblem();
-
     }
 
     [Authorize]
@@ -56,7 +55,7 @@ public class AccountController(SignInManager<AppUser> signInManager) : ApiContro
         });
     }
 
-    [HttpGet]
+    [HttpGet("state")]
     public IActionResult GetAuthState()
     {
         return Ok(new { isAuthenticated = User.Identity?.IsAuthenticated ?? false });
