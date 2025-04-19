@@ -33,13 +33,13 @@ button.match-input-height {
   border-right-style: none !important;
 }
 
-.mat-mdc-snack-bar-container.snack-error {
+.mat-mdc-snack-bar-container.snackbar-error {
   --mdc-snackbar-container-color: red;
   --mdc-snack-bar-button-color: white;
   --mdc-snackbar-supporting-text-color: white;
 }
 
-.mat-mdc-snack-bar-container.snack-success {
+.mat-mdc-snack-bar-container.snackbar-success {
   --mdc-snackbar-container-color: green;
   --mdc-snack-bar-button-color: white;
   --mdc-snackbar-supporting-text-color: white;

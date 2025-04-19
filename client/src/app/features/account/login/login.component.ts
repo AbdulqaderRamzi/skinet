@@ -4,7 +4,7 @@ import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { AccountService } from '../../../core/services/account.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +16,13 @@ export class LoginComponent {
   private accountService = inject(AccountService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private activatedRouter = inject(ActivatedRoute);
+  returnUrl = '/shop';
+
+  constructor() {
+    const url = this.activatedRouter.snapshot.queryParams['returnUrl'];
+    if (url) this.returnUrl = url;
+  }
 
   loginForm = this.fb.group({
     email: [''],
@@ -26,7 +33,7 @@ export class LoginComponent {
     this.accountService.login(this.loginForm.value).subscribe({
       next: () => {
         this.accountService.getUserInfo().subscribe();
-        this.router.navigateByUrl('/shop');
+        this.router.navigateByUrl(this.returnUrl);
       },
     });
   }
