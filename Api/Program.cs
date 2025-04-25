@@ -11,17 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? throw new Exception("Cannot get Postgres connection string");
     opt.UseNpgsql(connectionString);
 });
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddCors();
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
 {
-     var connectionString = builder.Configuration.GetConnectionString("Redis") 
-        ?? throw new Exception("Cannot connect get Redis connection string");
+     var connectionString = builder.Configuration.GetConnectionString("Redis")
+        ?? throw new Exception("Cannot get Redis connection string");
      var configuration = ConfigurationOptions.Parse(connectionString, true);
      return ConnectionMultiplexer.Connect(configuration);
 });
@@ -29,6 +29,7 @@ builder.Services.AddSingleton<ICartService, CartService>();
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 var app = builder.Build();
 

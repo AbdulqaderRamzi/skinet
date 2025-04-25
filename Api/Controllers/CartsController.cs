@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class CartController(ICartService cartService) : ApiController
+public class CartsController(ICartService cartService) : ApiController
 {
     [HttpGet]
     public async Task<IActionResult> GetAsync(string id)

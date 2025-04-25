@@ -2,8 +2,9 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Cart, type CartItem } from '../../shared/models/cart';
-import { type Product } from '../../shared/models/product';
+import type { Product } from '../../shared/models/product';
 import { map } from 'rxjs';
+import type { DeliveryMethod } from '../../shared/models/deliveryMethod';
 
 @Injectable({
   providedIn: 'root',
@@ -12,14 +13,16 @@ export class CartService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
   cart = signal<Cart | null>(null);
+  selectedDelivery = signal<DeliveryMethod | null>(null);
   itemCount = computed(() => {
     return this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0);
   });
   totals = computed(() => {
     const cart = this.cart();
+    const delivery = this.selectedDelivery();
     if (!cart) return null;
     const subtotal = cart.items.reduce((sum, items) => sum + items.price * items.quantity, 0);
-    const shipping = 0;
+    const shipping = delivery ? delivery.price : 0;
     const discount = 0;
     return {
       subtotal,
@@ -30,7 +33,7 @@ export class CartService {
   });
 
   getCart(id: string) {
-    return this.http.get<Cart>(this.baseUrl + `cart?id=${id}`).pipe(
+    return this.http.get<Cart>(this.baseUrl + `carts?id=${id}`).pipe(
       map(cart => {
         this.cart.set(cart);
         return cart;
@@ -39,7 +42,7 @@ export class CartService {
   }
 
   setCart(cart: Cart) {
-    return this.http.post<Cart>(this.baseUrl + 'cart', cart).subscribe({
+    return this.http.post<Cart>(this.baseUrl + 'carts', cart).subscribe({
       next: cart => this.cart.set(cart),
     });
   }
@@ -72,7 +75,7 @@ export class CartService {
   }
 
   deleteCart() {
-    this.http.delete(this.baseUrl + `cart?id=${this.cart()?.id}`).subscribe({
+    this.http.delete(this.baseUrl + `carts?id=${this.cart()?.id}`).subscribe({
       next: () => {
         localStorage.removeItem('cart_id');
         this.cart.set(null);
