@@ -54,11 +54,6 @@ public class GenericRepository<T>(AppDbContext db)
         db.Set<T>().Remove(entity);
     }
 
-    public async Task<bool> SaveAsync()
-    {
-        return await db.SaveChangesAsync() > 0;
-    }
-
     public Task<bool> IsExistsAsync(Guid id)
     {
         return db.Set<T>().AnyAsync(e => e.Id == id);

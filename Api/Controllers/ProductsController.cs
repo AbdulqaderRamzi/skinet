@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class ProductsController(IGenericRepository<Product> repo) : ApiController
+public class ProductsController(IUnitOfWork unit) : ApiController
 {
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] ProductSpecParams specParams)
     {
         var spec = new ProductSpecification(specParams);
-        return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
+        return await CreatePagedResult(unit.Repository<Product>(), spec, specParams.PageIndex, specParams.PageSize);
     }
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var product = await repo.GetByIdAsync(id);
+        var product = await unit.Repository<Product>().GetByIdAsync(id);
         if (product is null) return NotFound();
         return Ok(product);
     }
@@ -26,21 +26,21 @@ public class ProductsController(IGenericRepository<Product> repo) : ApiControlle
     public async Task<IActionResult> GetBrands()
     {
         var spec = new BrandListSpecification(); 
-        return Ok(await repo.GetAllAsync(spec));
+        return Ok(await unit.Repository<Product>().GetAllAsync(spec));
     }
     
     [HttpGet("types")]
     public async Task<IActionResult> GetTypes()
     {
         var spec = new TypeListSpecification();
-        return Ok(await repo.GetAllAsync(spec));
+        return Ok(await unit.Repository<Product>().GetAllAsync(spec));
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(Product product)
     {
-        await repo.AddAsync(product);
-        return await repo.SaveAsync()
+        await unit.Repository<Product>().AddAsync(product);
+        return await unit.CompleteAsync()
             ? CreatedAtAction(nameof(Get), new { id = product.Id }, product)
             : BadRequest();
     }
@@ -51,12 +51,12 @@ public class ProductsController(IGenericRepository<Product> repo) : ApiControlle
         if (id != product.Id) 
             return BadRequest();
         
-        if (!await repo.IsExistsAsync(id))
+        if (!await unit.Repository<Product>().IsExistsAsync(id))
             return NotFound();
         
-        repo.Update(product);
+        unit.Repository<Product>().Update(product);
 
-        return await repo.SaveAsync()
+        return await unit.CompleteAsync()
             ? NoContent()
             : BadRequest();
     }
@@ -64,10 +64,10 @@ public class ProductsController(IGenericRepository<Product> repo) : ApiControlle
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var product = await repo.GetByIdAsync(id);
+        var product = await unit.Repository<Product>().GetByIdAsync(id);
         if (product is null) return NotFound();
-        repo.Remove(product);
-        return await repo.SaveAsync() 
+        unit.Repository<Product>().Remove(product);
+        return await unit.CompleteAsync()
             ? NoContent()
             : BadRequest();
     }
