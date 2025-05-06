@@ -9,15 +9,7 @@ import { TextInputComponent } from '../../../shared/components/text-input/text-i
 
 @Component({
   selector: 'app-login',
-  imports: [
-    ReactiveFormsModule,
-    MatCard,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatButton,
-    TextInputComponent,
-  ],
+  imports: [ReactiveFormsModule, MatCard, MatButton, TextInputComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
