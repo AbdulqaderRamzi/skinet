@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Api.Helpers;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ namespace Api.Controllers;
 
 public class ProductsController(IUnitOfWork unit) : ApiController
 {
+    [Cache(600)]
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] ProductSpecParams specParams)
     {
@@ -14,6 +16,7 @@ public class ProductsController(IUnitOfWork unit) : ApiController
         return await CreatePagedResult(unit.Repository<Product>(), spec, specParams.PageIndex, specParams.PageSize);
     }
     
+    [Cache(600)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
@@ -21,7 +24,8 @@ public class ProductsController(IUnitOfWork unit) : ApiController
         if (product is null) return NotFound();
         return Ok(product);
     }
-
+    
+    [Cache(10000)]
     [HttpGet("brands")]
     public async Task<IActionResult> GetBrands()
     {
@@ -29,6 +33,7 @@ public class ProductsController(IUnitOfWork unit) : ApiController
         return Ok(await unit.Repository<Product>().GetAllAsync(spec));
     }
     
+    [Cache(10000)]
     [HttpGet("types")]
     public async Task<IActionResult> GetTypes()
     {
@@ -36,6 +41,7 @@ public class ProductsController(IUnitOfWork unit) : ApiController
         return Ok(await unit.Repository<Product>().GetAllAsync(spec));
     }
 
+    [InvalidateCache("api/products|")]
     [HttpPost]
     public async Task<IActionResult> Create(Product product)
     {
@@ -45,6 +51,7 @@ public class ProductsController(IUnitOfWork unit) : ApiController
             : BadRequest();
     }
 
+    [InvalidateCache("api/products|")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, Product product)
     {
@@ -61,6 +68,7 @@ public class ProductsController(IUnitOfWork unit) : ApiController
             : BadRequest();
     }
 
+    [InvalidateCache("api/products|")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

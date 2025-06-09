@@ -9,27 +9,26 @@ import { CheckoutComponent } from './features/checkout/checkout.component';
 import { RegisterComponent } from './features/account/register/register.component';
 import { LoginComponent } from './features/account/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
-import { emptyCartGuard } from './core/guards/empty-cart.guard';
-import { CheckoutSuccessComponent } from './features/checkout/checkout-success/checkout-success.component';
 import { OrderComponent } from './features/orders/order.component';
 import { OrderDetailedComponent } from './features/orders/order-detailed/order-detailed.component';
-import { orderCompleteGuard } from './core/guards/order-complete.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'shop', component: ShopComponent },
   { path: 'shop/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard, emptyCartGuard] },
   {
-    path: 'checkout/success',
-    component: CheckoutSuccessComponent,
-    canActivate: [authGuard, orderCompleteGuard],
+    path: 'checkout',
+    loadChildren: () => import('./features/checkout/routes').then(r => r.checkoutRoutes),
   },
-  { path: 'orders', component: OrderComponent, canActivate: [authGuard] },
-  { path: 'orders/:id', component: OrderDetailedComponent, canActivate: [authGuard] },
-  { path: 'account/register', component: RegisterComponent },
-  { path: 'account/login', component: LoginComponent },
+  {
+    path: 'orders',
+    loadChildren: () => import('./features/orders/routes').then(r => r.orderRoutes),
+  },
+  {
+    path: 'account',
+    loadChildren: () => import('./features/account/routes').then(r => r.accountRoutes),
+  },
   { path: 'server-error', component: ServerErrorComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
